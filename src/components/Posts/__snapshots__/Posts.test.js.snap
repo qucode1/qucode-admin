@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Posts Component should render as expected 1`] = `
+<div>
+  <Post
+    details={false}
+    slug="post-slug"
+  />
+  <ul>
+    <li>
+      <Link
+        replace={false}
+        to="/posts/test"
+      >
+        <h2
+          className="title"
+        >
+          Using TravisCI (will not work)
+        </h2>
+      </Link>
+    </li>
+    <li>
+      <Link
+        replace={false}
+        to="/test"
+      >
+        Go Somewhere (Won't work)
+      </Link>
+    </li>
+    <li>
+      <Link
+        replace={false}
+        to="/about/cyxc/7sy"
+      >
+        Go Somewhere (Won't work)
+      </Link>
+    </li>
+  </ul>
+</div>
+`;

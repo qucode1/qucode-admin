@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NotFound /> should render h2 and p with message as expected 1`] = `
+<div>
+  <h2>
+    Nothing to see here :(
+  </h2>
+  <p>
+    test message
+  </p>
+</div>
+`;

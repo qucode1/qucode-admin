@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostDetail should render as expected 1`] = `
+<div>
+  <Post
+    details={true}
+    slug="post-slug"
+  />
+</div>
+`;
+
+exports[`PostDetail should render as expected 2`] = `
+<div>
+  <Route
+    component={[Function]}
+  />
+</div>
+`;

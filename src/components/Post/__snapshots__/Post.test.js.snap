@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render h2 and p with message as preview 1`] = `
+<div>
+  <h2
+    className="title"
+  >
+    <Link
+      className="link"
+      replace={false}
+      to="/posts/preview"
+    >
+      preview
+    </Link>
+  </h2>
+  <p
+    className="content"
+  >
+    preview-excerpt
+  </p>
+</div>
+`;
+
+exports[`should render h2 and p with message completely and without title link 1`] = `
+<div>
+  <h2
+    className="title"
+  >
+    preview
+  </h2>
+  <p
+    className="content"
+  >
+    preview-content
+  </p>
+  <Link
+    className="link"
+    replace={false}
+    to="/posts"
+  >
+    Go back to Posts
+  </Link>
+</div>
+`;
