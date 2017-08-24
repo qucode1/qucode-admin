@@ -46,9 +46,7 @@ class Row extends React.Component {
           message: `Row: '${data.name}' has been updated`
         }
       })
-      console.log(this.state.info)
       setTimeout(() => this.setState({ info: { status: 'idle', message: '...'} }), 10000)
-      console.log(this.state.info)
     }.bind(this))
     .catch(function(err) {
       this.setState({

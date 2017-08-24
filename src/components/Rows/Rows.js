@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc'
 
 import Row from '../Row/Row'
@@ -54,17 +55,30 @@ const SortableList = SortableContainer((props) => {
 })
 
 class SortableComponent extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = ({
-      items: ['599afd98d741302596bcc8c3', '599b024fdd595e261fe25504', '599b02d3dd595e261fe25506', '599b03527bd9c72b1058a319', '599b05ae7bd9c72b1058a31b']
+      items: []
     })
     this.onSortEnd = this.onSortEnd.bind(this)
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      items: nextProps.items
+    })
   }
   onSortEnd ({oldIndex, newIndex}) {
     this.setState({
       items: arrayMove(this.state.items, oldIndex, newIndex)
     })
+    const postRoute = `${variables.PUBLICAPI}list/599edcc033594a3cc30d44bd`
+    axios.post(postRoute, {items: this.state.items})
+    .then(function(res) {
+      console.log("list updated")
+    }.bind(this))
+    .catch(function(err) {
+      console.error(err)
+    }.bind(this))
   }
   render() {
     return (
@@ -78,16 +92,20 @@ class Rows extends React.Component {
     super(props)
     this.state = ({
       rows: [],
-      loading: true
+      loading: true,
+      activeItems: []
     })
   }
   componentDidMount () {
     const getRows = async () => {
       try {
-        let rows = await fetch(`${variables.PUBLICAPI}about/rows`)
+        let rows = await fetch(`${variables.PUBLICAPI}about/rows/active`)
+        let list = await fetch(`${variables.PUBLICAPI}list/599edcc033594a3cc30d44bd`)
         rows = await rows.json()
+        list = await list.json()
         this.setState({
           rows,
+          activeItems: list.items,
           loading: false
         })
       } catch(err) {
@@ -106,7 +124,7 @@ class Rows extends React.Component {
         <div className='lists'>
           <div className='list'>
             <h2>Public Rows</h2>
-            <SortableComponent activeRows={this.state.rows} />
+            <SortableComponent activeRows={this.state.rows} items={this.state.activeItems} loading={this.state.loading}/>
           </div>
         </div>
         <style jsx>{`
