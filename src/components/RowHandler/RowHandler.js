@@ -5,7 +5,7 @@ import Loading from '../Loading/Loading'
 import { Route } from 'react-router-dom'
 import variables from '../../../variables.json'
 
-class RowDetail extends React.Component {
+class RowHandler extends React.Component {
   constructor(props) {
     super(props)
     this.state = ({
@@ -13,7 +13,7 @@ class RowDetail extends React.Component {
       loading: true
     })
   }
-  componentDidMount() {
+  componentDidMount () {
     const getRow = async () => {
       try {
         let row = await fetch(`${variables.PUBLICAPI}about/rows/${this.props.match.params.id}`)
@@ -46,4 +46,4 @@ class RowDetail extends React.Component {
   }
 }
 
-export default RowDetail
+export default RowHandler

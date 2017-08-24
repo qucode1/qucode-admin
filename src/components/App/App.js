@@ -20,7 +20,7 @@ const App = () => (
           html, body {
             box-sizing: border-box
           }
-          html, body, body > div, body > div > div {
+          html, body, body > div:first-of-type, body > div:first-of-type > div:first-of-type {
             height: 100%;
             width: 100%;
           }
