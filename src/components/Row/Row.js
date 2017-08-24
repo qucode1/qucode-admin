@@ -78,12 +78,12 @@ class Row extends React.Component {
     const details = this.props.details
     const skills  = this.state.skills
     return (
-      <div className={this.state.info}>
-        <h2>{details
+      <div className='row'>
+        <h3>{details
             ? this.props.name
             : <Link to={`/rows/${this.props._id}`}>{this.props.name}</Link>
-        }</h2>
-        <div className={`status ${this.state.info.status}`}>{this.state.info.message}</div>
+        }</h3>
+        {details && <div className={`status ${this.state.info.status}`}>{this.state.info.message}</div>}
         {details
           ? <form className='form' onSubmit={this.handleSubmit} method='POST'>
               <div className='formElement'>
