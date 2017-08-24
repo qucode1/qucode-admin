@@ -1,10 +1,14 @@
-import React from 'react'
+import React    from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc'
+import axios    from 'axios'
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
+  arrayMove }   from 'react-sortable-hoc'
 
-import Row from '../Row/Row'
-import Loading from '../Loading/Loading'
+import Row      from '../Row/Row'
+import Loading  from '../Loading/Loading'
 
 import variables from '../../../variables.json'
 
@@ -28,7 +32,7 @@ const SortableItem = SortableElement((props) => {
       <style jsx>{`
         display: flex;
         align-items: center;
-        padding: 5px;
+        padding: 0 10px;
         background-color: #fff
         box-shadow: 0 0 2px rgb(162, 162, 162)
       `}</style>
@@ -40,7 +44,11 @@ const SortableList = SortableContainer((props) => {
   return (
     <div>
       {props.items.map((value, index) => (
-        <SortableItem key={`row-${index}`} index={index} value={value} rows={props.rows}/>
+        <SortableItem
+          key   ={`row-${index}`}
+          index ={index}
+          value ={value}
+          rows  ={props.rows}/>
       ))}
       <style jsx>{`
         border: 1px solid #c5c5c5;
@@ -82,7 +90,12 @@ class SortableComponent extends React.Component {
   }
   render() {
     return (
-      <SortableList items={this.state.items} onSortEnd={this.onSortEnd} useDragHandle={true} lockAxis={'y'} rows={this.props.activeRows}/>
+      <SortableList
+        items={this.state.items}
+        onSortEnd={this.onSortEnd}
+        useDragHandle={true}
+        lockAxis={'y'}
+        rows={this.props.rows}/>
     )
   }
 }
@@ -91,22 +104,30 @@ class Rows extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
-      rows: [],
-      loading: true,
-      activeItems: []
+      loading:       true,
+      activeRows:    [],
+      inactiveRows:  [],
+      activeItems:   [],
+      inactiveItems: []
     })
   }
   componentDidMount () {
     const getRows = async () => {
       try {
-        let rows = await fetch(`${variables.PUBLICAPI}about/rows/active`)
-        let list = await fetch(`${variables.PUBLICAPI}list/599edcc033594a3cc30d44bd`)
-        rows = await rows.json()
-        list = await list.json()
+        let activeRows   = await fetch(`${variables.PUBLICAPI}about/rows/active`)
+        let inactiveRows = await fetch(`${variables.PUBLICAPI}about/rows/inactive`)
+        let activeList   = await fetch(`${variables.PUBLICAPI}list/599edcc033594a3cc30d44bd`)
+        let inactiveList = await fetch(`${variables.PUBLICAPI}list/599f4c2f815b293f1241ca33`)
+        activeRows       = await activeRows.json()
+        inactiveRows     = await inactiveRows.json()
+        activeList       = await activeList.json()
+        inactiveList     = await inactiveList.json()
         this.setState({
-          rows,
-          activeItems: list.items,
-          loading: false
+          activeRows:    activeRows,
+          inactiveRows:  inactiveRows,
+          activeItems:   activeList.items,
+          inactiveItems: inactiveList.items,
+          loading:       false
         })
       } catch(err) {
         console.error(err)
@@ -124,16 +145,26 @@ class Rows extends React.Component {
         <div className='lists'>
           <div className='list'>
             <h2>Public Rows</h2>
-            <SortableComponent activeRows={this.state.rows} items={this.state.activeItems} loading={this.state.loading}/>
+            <SortableComponent
+              rows    ={this.state.activeRows}
+              items   ={this.state.activeItems}
+              loading ={this.state.loading}/>
+          </div>
+          <div className='list'>
+            <h2>Private Rows</h2>
+            <SortableComponent
+              rows    ={this.state.inactiveRows}
+              items   ={this.state.inactiveItems}
+              loading ={this.state.loading}/>
           </div>
         </div>
         <style jsx>{`
           .lists {
-            display: flex;
-            justify-content: space-around
+            display:         flex;
+            justify-content: flex-start
           }
           .list {
-
+            margin: 0 15px
           }
         `}</style>
       </div>
