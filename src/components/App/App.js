@@ -7,6 +7,8 @@ import Header from '../Header/Header'
 import Sidebar from '../Sidebar/Sidebar'
 import Routes from '../Routes/Routes'
 
+import { baseStyles } from './baseStyles'
+
 const App = () => (
   <Router>
     <div>
@@ -16,23 +18,27 @@ const App = () => (
         <main>
           <Routes />
         </main>
+        <style jsx global>{ baseStyles }</style>
         <style jsx global>{`
-          html, body {
-            box-sizing: border-box
-          }
-          html, body, body > div:first-of-type, body > div:first-of-type > div:first-of-type {
-            height: 100%;
-            width: 100%;
-          }
+
         `}</style>
         <style jsx>{`
           .container {
             display: flex;
+            justify-content: center;
             height: calc(100% - 70px);
             padding-top: 70px
           }
           main {
-            flex: 3
+            width: 100%;
+          }
+          @media only screen and (min-width: 900px) {
+            .container {
+              padding-left: 250px
+            }
+            main {
+              max-width: 900px
+            }
           }
         `}</style>
       </div>

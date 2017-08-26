@@ -5,7 +5,8 @@ export const headerStyles = `
   position: fixed;
   top: 0;
   width: 100%;
-  height: 70px
+  height: 70px;
+  z-index: 2
 }
 .container {
   max-width: var(--site-width);
@@ -31,7 +32,7 @@ export const headerStyles = `
 .link {
   color: #fff;
 }
-.link:hover, .link:focus {
+a:hover, a:focus {
   color: #33ceff
 }
 `

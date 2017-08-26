@@ -14,6 +14,14 @@ const Header = () => (
       </nav>
     </div>
     <style jsx>{ headerStyles }</style>
+    <style jsx global>{`
+      a.link {
+        color: white
+      }
+      a.link:hover, a.link:focus {
+        color: #33ceff
+      }
+    `}</style>
   </header>
 )
 export default Header

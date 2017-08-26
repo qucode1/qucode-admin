@@ -8,6 +8,8 @@ class Row extends React.Component {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.changeInput = this.changeInput.bind(this)
+    this.handleChanges = this.handleChanges.bind(this)
+    this.handleChangedClass = this.handleChangedClass.bind(this)
     const content = this.props.text ? this.props.text.content : ''
 
     this.state = ({
@@ -18,8 +20,14 @@ class Row extends React.Component {
       info: {
         status: 'idle',
         message: '...'
-      }
+      },
+      isChanged: false,
+      initialState: {}
     })
+  }
+  componentDidMount() {
+    const state = this.state
+    this.setState({ initialState: state })
   }
   handleSubmit(e) {
     e.preventDefault()
@@ -38,12 +46,11 @@ class Row extends React.Component {
 
     axios.post(postRoute, data)
     .then(function(res) {
-      console.log('success')
-
       this.setState({
         info: {
           status: 'success',
-          message: `Row: '${data.name}' has been updated`
+          message: `Row: '${data.name}' has been updated`,
+          isChanged: false
         }
       })
       setTimeout(() => this.setState({ info: { status: 'idle', message: '...'} }), 10000)
@@ -61,14 +68,65 @@ class Row extends React.Component {
   }
 
   changeInput (e) {
-    const name = e.target.name
+    const key = e.target.name
     const value = ( e.target.type === "radio")
       ? (e.target.value === "true"
         ? true
         : false)
       : e.target.value
     this.setState({
-      [name]: value
+      [key]: value
+    }, this.handleChanges)
+  }
+
+  handleChanges() {
+    const formFields = {
+      statusButtons: {
+        ref: this.statusButtons,
+        changed: false
+      },
+      nameInput: {
+        ref: this.nameInput,
+        changed: false
+      },
+      contentInput: {
+        ref: this.contentInput,
+        changed: false
+      }
+    }
+    const state   = this.state
+    const first   = this.state.initialState
+    const name    = state.name    !== first.name
+    const content = state.content !== first.content
+    const active  = state.active  !== first.active
+    name
+      ? (formFields.nameInput.changed = true)
+      : (formFields.nameInput.changed = false)
+    content
+      ? (formFields.contentInput.changed = true)
+      : (formFields.contentInput.changed = false)
+    active
+      ? (formFields.statusButtons.changed = true)
+      : (formFields.statusButtons.changed = false)
+    if( name || content || active ) {
+      this.setState({
+        isChanged: true
+      })
+    } else {
+      this.setState({
+        isChanged: false
+      })
+    }
+    this.handleChangedClass(formFields)
+  }
+
+  handleChangedClass(formFields) {
+    const formFieldKeys = Object.keys(formFields)
+    formFieldKeys.map(key => {
+      formFields[key].changed
+        ? formFields[key].ref.classList.add('changed')
+        : formFields[key].ref.classList.remove('changed')
+      console.log("handleChangedClass")
     })
   }
 
@@ -84,13 +142,13 @@ class Row extends React.Component {
         {details && <div className={`status ${this.state.info.status}`}>{this.state.info.message}</div>}
         {details
           ? <form className='form' onSubmit={this.handleSubmit} method='POST'>
-              <div className='formElement'>
+              <div ref={(radio) => this.statusButtons = radio} className='formElement'>
                 <input className='radioButton formElement' type='radio' name='active' value={true} onChange={this.changeInput} checked={this.state.active ? true : false}/>Public
                 <input className='radioButton formElement' type='radio' name='active' value={false} onChange={this.changeInput} checked={this.state.active ? false : true}/>Private
               </div>
-              <input className='formElement' type='text' name='name' value={this.state.name} onChange={this.changeInput} />
-              <textarea className='formElement' cols={30} rows={5} type='text' name='content' value={this.state.content} onChange={this.changeInput} />
-              <button className='formElement' type='submit'>Save Changes</button>
+              <input ref={(name) => this.nameInput = name} className='formElement' type='text' name='name' value={this.state.name} onChange={this.changeInput} />
+              <textarea ref={(text) => this.contentInput = text} className='formElement' cols={30} rows={5} type='text' name='content' value={this.state.content} onChange={this.changeInput} />
+              {this.state.isChanged && <button className='formElement' type='submit'>Save Changes</button>}
             </form>
           : null
         }
@@ -143,6 +201,9 @@ class Row extends React.Component {
             opacity: 1;
             background-color: rgb(107, 228, 96);
             color: #fff
+          }
+          .changed {
+            border: 2px solid #ffd100
           }
         `}</style>
       </div>

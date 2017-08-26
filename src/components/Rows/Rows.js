@@ -79,7 +79,10 @@ class SortableComponent extends React.Component {
     this.setState({
       items: arrayMove(this.state.items, oldIndex, newIndex)
     })
-    const postRoute = `${variables.PUBLICAPI}list/599edcc033594a3cc30d44bd`
+    const currentList = this.props.currentList === "active"
+      ? variables.ACTIVEROWS
+      : variables.INACTIVEROWS
+    const postRoute = `${variables.PUBLICAPI}list/${currentList}`
     axios.post(postRoute, {items: this.state.items})
     .then(function(res) {
       console.log("list updated")
@@ -116,8 +119,8 @@ class Rows extends React.Component {
       try {
         let activeRows   = await fetch(`${variables.PUBLICAPI}about/rows/active`)
         let inactiveRows = await fetch(`${variables.PUBLICAPI}about/rows/inactive`)
-        let activeList   = await fetch(`${variables.PUBLICAPI}list/599edcc033594a3cc30d44bd`)
-        let inactiveList = await fetch(`${variables.PUBLICAPI}list/599f4c2f815b293f1241ca33`)
+        let activeList   = await fetch(`${variables.PUBLICAPI}list/${variables.ACTIVEROWS}`)
+        let inactiveList = await fetch(`${variables.PUBLICAPI}list/${variables.INACTIVEROWS}`)
         activeRows       = await activeRows.json()
         inactiveRows     = await inactiveRows.json()
         activeList       = await activeList.json()
@@ -148,6 +151,7 @@ class Rows extends React.Component {
             <SortableComponent
               rows    ={this.state.activeRows}
               items   ={this.state.activeItems}
+              currentList = "active"
               loading ={this.state.loading}/>
           </div>
           <div className='list'>
@@ -155,6 +159,7 @@ class Rows extends React.Component {
             <SortableComponent
               rows    ={this.state.inactiveRows}
               items   ={this.state.inactiveItems}
+              currentList = "inactive"
               loading ={this.state.loading}/>
           </div>
         </div>

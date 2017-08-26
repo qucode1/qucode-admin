@@ -15,22 +15,25 @@ const Sidebar = () => (
       .sidebar {
         position: fixed;
         left: 0;
+        top: 0;
         height: 100%;
-        width: 250px
-        background-color: #22bbee
+        width: 200px
+        background-color: #22bbee;
+        z-index: 1
       }
       .container {
+        margin-top: 70px;
         display: flex;
         flex-direction: column;
         align-items: center
       }
       .nav {
         display: flex;
-        flex-direction: column
+        flex-direction: column;
+        padding-top: 70px;
       }
       @media only screen and (min-width: 900px) {
         .sidebar {
-          position: relative
         }
       }
     `}</style>
