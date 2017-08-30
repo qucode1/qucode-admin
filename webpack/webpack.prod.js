@@ -8,6 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const OfflinePlugin = require('offline-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 const srcDir = resolve(__dirname, '../src')
 const env = process.env.NODE_ENV
@@ -15,7 +16,7 @@ const env = process.env.NODE_ENV
 module.exports = {
   context: resolve(__dirname, '../src'), //make default dir
   entry: {
-    app: `./index.js`,
+    app: ["babel-polyfill", `./index.js`],
     vendor: ['react', 'react-dom', 'react-router-dom'] //split with commonchunks
   },
   output: {
@@ -106,6 +107,10 @@ module.exports = {
       from: resolve(__dirname, '../src/icons/'),
       to: resolve(__dirname, '../dist/')
     }]),
+    new UglifyJSPlugin({
+      sourceMap: true,
+      ecma: 8
+    }),
     new OfflinePlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

@@ -2,13 +2,7 @@
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
-    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
-    "babel-plugin-transform-es2015-block-scoping": "^6.24.1",
-    "babel-plugin-transform-es2015-classes": "^6.24.1",
-    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-plugin-transform-es2015-parameters": "^6.24.1",
-    "babel-plugin-transform-es2015-template-literals": "^6.22.0",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "bundle-loader": "^0.5.5",
     "clean-webpack-plugin": "^0.1.16",
@@ -33,6 +27,8 @@
     "standard-loader": "^6.0.1",
     "style-loader": "^0.18.2",
     "styled-jsx": "^1.0.10",
+    "uglify-es": "^3.0.28",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.5.5",
     "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "^2.7.1"
@@ -59,6 +55,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.16.2"
+    "axios": "^0.16.2",
+    "babel-polyfill": "^6.26.0"
   }
 }

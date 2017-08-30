@@ -1,6 +1,6 @@
 export const headerStyles = `
 .header {
-  background-image: linear-gradient(to right, #22bbee, #0033ee);
+  background-image: linear-gradient(to left,#22bbee,#0084de);
   color: white;
   position: fixed;
   top: 0;

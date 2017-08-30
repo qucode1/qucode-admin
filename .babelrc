@@ -1,18 +1,19 @@
 {
   "plugins": [
     "styled-jsx/babel",
-    "transform-react-jsx",
-    "transform-es2015-template-literals",
-    "transform-es2015-parameters",
-    "transform-es2015-destructuring",
-    "transform-es2015-classes",
-    "transform-es2015-arrow-functions",
-    "transform-es2015-block-scoping"
-
+    "transform-react-jsx"
   ],
   "env": {
     "test": {
       "plugins": ["transform-es2015-modules-commonjs"]
     }
-  }
+  },
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 3 versions", "safari >= 7"]
+      }
+    }]
+  ]
+
 }

@@ -13,10 +13,10 @@ module.exports = {
   output: {
     filename: 'bundle.js'
   },
-  devServer: {
-    historyApiFallback: true,
-    contentBase: './'
-  },
+  // devServer: {
+  //   historyApiFallback: true,
+  //   contentBase: './'
+  // },
   module: {
     rules: [
       {
