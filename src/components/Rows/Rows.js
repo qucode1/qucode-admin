@@ -9,6 +9,7 @@ import {
 
 import Row      from '../Row/Row'
 import Loading  from '../Loading/Loading'
+import Auth from '../../modules/Auth'
 
 import variables from '../../../variables.json'
 
@@ -115,10 +116,15 @@ class Rows extends React.Component {
     })
   }
   componentDidMount () {
+    const myHeaders = new Headers({
+      'Authorization': `bearer ${Auth.getToken()}`
+    })
     const getRows = async () => {
       try {
         let activeRows   = await fetch(`${variables.PUBLICAPI}about/rows/active`)
-        let inactiveRows = await fetch(`${variables.PUBLICAPI}about/rows/inactive`)
+        let inactiveRows = await fetch(`${variables.PUBLICAPI}about/rows/inactive`, {
+          headers: myHeaders
+        })
         let activeList   = await fetch(`${variables.PUBLICAPI}list/${variables.ACTIVEROWS}`)
         let inactiveList = await fetch(`${variables.PUBLICAPI}list/${variables.INACTIVEROWS}`)
         activeRows       = await activeRows.json()

@@ -9,7 +9,7 @@ const env = process.env.NODE_ENV
 
 module.exports = {
   // context: resolve(__dirname, '../src'),
-  entry: `${srcDir}/index.js`,
+  entry: ["babel-polyfill", `${srcDir}/index.js`],
   output: {
     filename: 'bundle.js'
   },

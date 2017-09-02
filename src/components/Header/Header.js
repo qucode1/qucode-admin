@@ -1,6 +1,7 @@
 import React from 'react'
 import { headerStyles } from './headerStyles'
 import { Link } from 'react-router-dom'
+import Auth from '../../modules/Auth'
 
 const Header = () => (
   <header className='header'>
@@ -10,6 +11,13 @@ const Header = () => (
         <ul className='nav'>
           <li className='navItem'><Link className='link' to='/posts'>Posts</Link></li>
           <li className='navItem'><Link className='link' to='/about'>About</Link></li>
+          {Auth.isUserAuthenticated()
+          ? <li className='navItem'><Link className='link' to='/logout'>Log Out</Link></li>
+          : <li className='navItem'><Link className='link' to='/login'>Log In</Link></li>
+          }
+          {!Auth.isUserAuthenticated() && <li className='navItem'><Link className='link' to='/signup'>Sign Up</Link></li> }
+
+
         </ul>
       </nav>
     </div>
