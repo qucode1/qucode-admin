@@ -11,7 +11,10 @@ const Posts = (props) => (
     ))}
     <ul>
       <li>
-        <Link to='/posts/test'><h2 className={styles.title}>Using TravisCI (will not work)</h2></Link>
+        <Link to='/cms/blog/posts/test'><h2 className={styles.title}>Using TravisCI (will not work)</h2></Link>
+      </li>
+      <li>
+        <Link to='/cms/blog/test'>Go Somewhere (Won't work)</Link>
       </li>
       <li>
         <Link to='/test'>Go Somewhere (Won't work)</Link>

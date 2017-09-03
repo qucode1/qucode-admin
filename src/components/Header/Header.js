@@ -9,7 +9,7 @@ const Header = () => (
       <h1 className='logo'><Link to='/' className='link'>QuCode | Admin Panel</Link></h1>
       <nav>
         <ul className='nav'>
-          <li className='navItem'><Link className='link' to='/posts'>Posts</Link></li>
+          <li className='navItem'><Link className='link' to='/cms'>CMS</Link></li>
           <li className='navItem'><Link className='link' to='/about'>About</Link></li>
           {Auth.isUserAuthenticated()
           ? <li className='navItem'><Link className='link' to='/logout'>Log Out</Link></li>

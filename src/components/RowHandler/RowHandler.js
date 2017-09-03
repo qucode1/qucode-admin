@@ -36,7 +36,7 @@ class RowHandler extends React.Component {
       <div>
         {this.state.loading
           ? <Loading />
-          : (this.state.row
+          : (this.state.row.name !== "CastError"
             ? <Row {...this.state.row} details />
             : <Route component={() => <NotFound message='Row not found' />} />
           )

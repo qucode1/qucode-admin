@@ -1,11 +1,14 @@
 import React from 'react'
 import {
-  HashRouter as Router
+  HashRouter as Router,
+  Switch
 } from 'react-router-dom'
 
 import Header from '../Header/Header'
 import Sidebar from '../Sidebar/Sidebar'
 import Routes from '../Routes/Routes'
+import BaseRoutes from '../BaseRoutes/BaseRoutes'
+import CMS from '../CMS/CMS'
 
 import { baseStyles } from './baseStyles'
 
@@ -14,14 +17,11 @@ const App = () => (
     <div>
       <Header />
       <div className='container'>
-        <Sidebar />
         <main>
-          <Routes />
+          <BaseRoutes />
+
         </main>
         <style jsx global>{ baseStyles }</style>
-        <style jsx global>{`
-
-        `}</style>
         <style jsx>{`
           .container {
             display: flex;

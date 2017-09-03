@@ -5,10 +5,8 @@ const Sidebar = () => (
   <sidebar className='sidebar'>
     <div className='container'>
       <ul className='nav'>
-        <li className='navItem'><Link className='link' to='/posts'>Posts</Link></li>
-        <li className='navItem'><Link className='link' to='/about'>About</Link></li>
-        <li className='navItem'><Link className='link' to='/'>Home</Link></li>
-        <li className='navItem'><Link className='link' to='/rows'>Rows</Link></li>
+        <li className='navItem'><Link className='link' to='/cms/blog/posts'>Posts</Link></li>
+        <li className='navItem'><Link className='link' to='/cms/rows'>Rows</Link></li>
       </ul>
     </div>
     <style jsx>{`
@@ -19,7 +17,8 @@ const Sidebar = () => (
         height: 100%;
         width: 200px
         background-color: #22bbee;
-        z-index: 1
+        z-index: 1;
+        box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
       }
       .container {
         margin-top: 70px;

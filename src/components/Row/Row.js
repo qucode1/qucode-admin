@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
+import NotFound from '../NotFound/NotFound'
 import variables from '../../../variables.json'
 
 class Row extends React.Component {
@@ -137,7 +138,7 @@ class Row extends React.Component {
       <div className='row'>
         <h3>{details
             ? this.props.name
-            : <Link to={`/rows/${this.props._id}`}>{this.props.name}</Link>
+            : <Link to={`/cms/rows/${this.props._id}`}>{this.props.name}</Link>
         }</h3>
         {details && <div className={`status ${this.state.info.status}`}>{this.state.info.message}</div>}
         {details
@@ -158,8 +159,11 @@ class Row extends React.Component {
         ))
         : null
         }
-        {details && <Link to='/rows' >Go back to Rows</Link>}
+        {details && <Link to='/cms/rows' >Go back to Rows</Link>}
         <style jsx>{`
+          .row {
+            padding: 0 5px
+          }
           .container {
             display: flex;
             flex-direction: column;
@@ -204,6 +208,9 @@ class Row extends React.Component {
           }
           .changed {
             border: 2px solid #ffd100
+          }
+          h3 {
+            margin: 0
           }
         `}</style>
       </div>

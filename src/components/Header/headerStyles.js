@@ -6,7 +6,8 @@ export const headerStyles = `
   top: 0;
   width: 100%;
   height: 70px;
-  z-index: 2
+  z-index: 2;
+  box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
 }
 .container {
   max-width: var(--site-width);

@@ -88,17 +88,13 @@ class Routes extends Component {
     return (
       <Switch>
         {!Auth.isUserAuthenticated() && <Route path='/' component={LazyLogin} />}
-        <Route exact path='/' render={() => (
-          <h2>Welcome to my Blog! My Web App SW should update automatically...!</h2>
+        <Route exact path='/cms' render={() => (
+          <h2>Welcome to my CMS!</h2>
         )} />
-        <Route path='/login' component={LazyLogin} />
-        <Route path='/logout' component={LazyLogout} />
-        <Route path='/signup' component={LazySignup} />
-        <Route path='/posts/:slug' component={(props) => <LazyPostDetail posts={posts} match={props.match} />} />
-        <Route path='/posts' component={() => <LazyPosts posts={posts} />} />
-        <Route path='/rows/:id' component={LazyRowHandler} />
-        <Route path='/rows' component={() => <LazyRows />} />
-        <Route exact path='/about' component={LazyAbout} />
+        <Route path='/cms/blog/posts/:slug' component={(props) => <LazyPostDetail posts={posts} match={props.match} />} />
+        <Route path='/cms/blog/posts' component={() => <LazyPosts posts={posts} />} />
+        <Route path='/cms/rows/:id' component={LazyRowHandler} />
+        <Route path='/cms/rows' component={() => <LazyRows />} />
         <Route component={() => <LazyNotFound message='Url does not exist' />} />
         <style jsx>{`
         `}</style>
