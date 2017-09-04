@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { Route, Link } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound'
+import DeleteRow from '../DeleteRow/DeleteRow'
 import variables from '../../../variables.json'
 
 class Row extends React.Component {
@@ -41,19 +42,26 @@ class Row extends React.Component {
     const data = {
       name: this.state.name,
       content: this.state.content,
-      active: this.state.active
+      active: this.state.active || false
     }
-    const postRoute = `${variables.PUBLICAPI}about/rows/${this.props._id}`
+    const editRoute = `${variables.PUBLICAPI}about/rows/${this.props._id}`
+    const createRoute = `${variables.PUBLICAPI}about/rows`
+    const postRoute = this.props.newRow ? createRoute : editRoute
 
     axios.post(postRoute, data)
     .then(function(res) {
       this.setState({
         info: {
           status: 'success',
-          message: `Row: '${data.name}' has been updated`,
+          message: `Row: '${data.name}' has been saved`,
           isChanged: false
         }
       })
+      const newState = this.state
+      this.setState({
+        initialState: newState
+      })
+      this.handleChanges()
       setTimeout(() => this.setState({ info: { status: 'idle', message: '...'} }), 10000)
     }.bind(this))
     .catch(function(err) {
@@ -127,7 +135,6 @@ class Row extends React.Component {
       formFields[key].changed
         ? formFields[key].ref.classList.add('changed')
         : formFields[key].ref.classList.remove('changed')
-      console.log("handleChangedClass")
     })
   }
 
@@ -135,7 +142,7 @@ class Row extends React.Component {
     const details = this.props.details
     const skills  = this.state.skills
     return (
-      <div className='row'>
+      <div className={`row ${details ? 'card' : ''}`}>
         <h3>{details
             ? this.props.name
             : <Link to={`/cms/rows/${this.props._id}`}>{this.props.name}</Link>
@@ -144,12 +151,12 @@ class Row extends React.Component {
         {details
           ? <form className='form' onSubmit={this.handleSubmit} method='POST'>
               <div ref={(radio) => this.statusButtons = radio} className='formElement'>
-                <input className='radioButton formElement' type='radio' name='active' value={true} onChange={this.changeInput} checked={this.state.active ? true : false}/>Public
-                <input className='radioButton formElement' type='radio' name='active' value={false} onChange={this.changeInput} checked={this.state.active ? false : true}/>Private
+                <input className='radioButton' type='radio' name='active' value={true} onChange={this.changeInput} checked={this.state.active ? true : false}/>Public
+                <input className='radioButton' type='radio' name='active' value={false} onChange={this.changeInput} checked={this.state.active ? false : true}/>Private
               </div>
-              <input ref={(name) => this.nameInput = name} className='formElement' type='text' name='name' value={this.state.name} onChange={this.changeInput} />
-              <textarea ref={(text) => this.contentInput = text} className='formElement' cols={30} rows={5} type='text' name='content' value={this.state.content} onChange={this.changeInput} />
-              {this.state.isChanged && <button className='formElement' type='submit'>Save Changes</button>}
+              <input ref={(name) => this.nameInput = name} className='formElement textElement' type='text' name='name' value={this.state.name} onChange={this.changeInput} />
+              <textarea ref={(text) => this.contentInput = text} className='formElement textElement' cols={30} rows={7} type='text' name='content' value={this.state.content} onChange={this.changeInput} />
+              {this.state.isChanged && <button className='submit formElement' type='submit'>Save</button>}
             </form>
           : null
         }
@@ -160,9 +167,17 @@ class Row extends React.Component {
         : null
         }
         {details && <Link to='/cms/rows' >Go back to Rows</Link>}
+        {details && !this.props.newRow && <DeleteRow name={this.props.name} id={this.props._id}/>}
         <style jsx>{`
           .row {
             padding: 0 5px
+          }
+          .card {
+            box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+            padding: 10px;
+            margin: 15px auto;
+            width: 90%;
+            max-width: 700px;
           }
           .container {
             display: flex;
@@ -177,10 +192,20 @@ class Row extends React.Component {
           }
           .formElement {
             margin: 5px 0;
-            padding: 5px
+            padding: 5px;
+            box-sizing: border-box;
+            width: 100%;
+            border: 2px solid transparent;
+            border-left: 4px solid #22bbee;
+            box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+            outline: none
+          }
+          .textElement {
+
           }
           .radioButton {
-            margin: 0 5px
+            margin: 0 5px;
+            width: auto
           }
           .status {
             opacity: 0;
@@ -207,7 +232,13 @@ class Row extends React.Component {
             color: #fff
           }
           .changed {
-            border: 2px solid #ffd100
+            border-left: 4px solid #ffd100
+          }
+          .submit {
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #ffd100
           }
           h3 {
             margin: 0

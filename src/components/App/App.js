@@ -32,10 +32,12 @@ const App = () => (
           main {
             width: 100%;
           }
-          @media only screen and (min-width: 900px) {
+          @media only screen and (max-width: 1300px) and (min-width: 900px) {
             .container {
-              padding-left: 250px
+              padding-left: 215px
             }
+          }
+          @media only screen and (min-width: 900px) {
             main {
               max-width: 900px
             }

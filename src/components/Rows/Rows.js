@@ -46,11 +46,11 @@ const SortableList = SortableContainer((props) => {
     <div style={{borderColor: props.color}}>
       {props.items.map((value, index) => (
         <SortableItem
-          key   ={`row-${index}`}
+          key         = {`row-${index}`}
           handleColor = {props.handleColor}
-          index ={index}
-          value ={value}
-          rows  ={props.rows}/>
+          index       = {index}
+          value       = {value}
+          rows        = {props.rows}/>
       ))}
       <style jsx>{`
         border: 4px solid #c5c5c5;
@@ -97,13 +97,13 @@ class SortableComponent extends React.Component {
   render() {
     return (
       <SortableList
-        items={this.state.items}
-        color={this.props.color}
-        handleColor={this.props.handleColor}
-        onSortEnd={this.onSortEnd}
-        useDragHandle={true}
-        lockAxis={'y'}
-        rows={this.props.rows}/>
+        items         = {this.state.items}
+        color         = {this.props.color}
+        handleColor   = {this.props.handleColor}
+        onSortEnd     = {this.onSortEnd}
+        useDragHandle = {true}
+        lockAxis      = {'y'}
+        rows          = {this.props.rows}/>
     )
   }
 }
@@ -159,24 +159,25 @@ class Rows extends React.Component {
           <div className='list'>
             <h2>Public Rows</h2>
             <SortableComponent
-              rows    ={this.state.activeRows}
-              items   ={this.state.activeItems}
-              color   ="rgb(73, 204, 73)"
+              rows        = {this.state.activeRows}
+              items       = {this.state.activeItems}
+              color       = "rgb(73, 204, 73)"
               handleColor = "rgba(73, 204, 73, 0.6)"
               currentList = "active"
-              loading ={this.state.loading}/>
+              loading     = {this.state.loading}/>
           </div>
           <div className='list'>
             <h2>Private Rows</h2>
             <SortableComponent
-              rows    ={this.state.inactiveRows}
-              items   ={this.state.inactiveItems}
-              color   ="rgb(255, 100, 100)"
+              rows        = {this.state.inactiveRows}
+              items       = {this.state.inactiveItems}
+              color       = "rgb(255, 100, 100)"
               handleColor = "rgba(255, 100, 100, 0.6)"
               currentList = "inactive"
-              loading ={this.state.loading}/>
+              loading     = {this.state.loading}/>
           </div>
         </div>
+        <Link to='/cms/rows/new'><button className='addRowButton'>+</button></Link>
         <style jsx>{`
           .lists {
             display:         flex;
@@ -187,6 +188,20 @@ class Rows extends React.Component {
           }
           h2 {
             text-align: center
+          }
+          .addRowButton {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            color: #fff;
+            background-color: rgb(244, 159, 16);
+            border-radius: 50%;
+            font-size: 2em;
+            width: 1.5em;
+            height: 1.5em;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
           }
         `}</style>
       </div>

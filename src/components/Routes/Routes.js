@@ -11,6 +11,7 @@ import Signup from 'bundle-loader?lazy&name=bundle-[name]!../Signup/Signup'
 import About from 'bundle-loader?lazy&name=bundle-[name]!../About/About'
 import Posts from 'bundle-loader?lazy&name=bundle-[name]!../Posts/Posts'
 import Rows from 'bundle-loader?lazy&name=bundle-[name]!../Rows/Rows'
+import Row from 'bundle-loader?lazy&name=bundle-[name]!../Row/Row'
 import PostDetail from 'bundle-loader?lazy&name=bundle-[name]!../PostDetail/PostDetail'
 import RowHandler from 'bundle-loader?lazy&name=bundle-[name]!../RowHandler/RowHandler'
 import NotFound from 'bundle-loader?lazy&name=bundle-[name]!../NotFound/NotFound'
@@ -53,6 +54,12 @@ const LazyRows = (props) => (
   </Bundle>
 )
 
+const LazyRow = (props) => (
+  <Bundle load={Row}>
+    {LazyRow => <LazyRow {...props} />}
+  </Bundle>
+)
+
 const LazyPostDetail = (props) => (
   <Bundle load={PostDetail}>
     {LazyPostDetail => <LazyPostDetail {...props} />}
@@ -79,6 +86,7 @@ class Routes extends Component {
     Signup(() => {})
     Posts(() => {})
     Rows(() => {})
+    Row(() => {})
     PostDetail(() => {})
     RowHandler(() => {})
     NotFound(() => {})
@@ -93,6 +101,7 @@ class Routes extends Component {
         )} />
         <Route path='/cms/blog/posts/:slug' component={(props) => <LazyPostDetail posts={posts} match={props.match} />} />
         <Route path='/cms/blog/posts' component={() => <LazyPosts posts={posts} />} />
+        <Route path='/cms/rows/new' component={() => <LazyRow name='New Row' details newRow/>} />
         <Route path='/cms/rows/:id' component={LazyRowHandler} />
         <Route path='/cms/rows' component={() => <LazyRows />} />
         <Route component={() => <LazyNotFound message='Url does not exist' />} />
