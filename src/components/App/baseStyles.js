@@ -17,6 +17,7 @@ export const baseStyles = `
   body {
     font-size: 1.5rem;
     margin: 0;
+    background-color: rgb(231, 244, 255)
   }
   ul {
     list-style: none;

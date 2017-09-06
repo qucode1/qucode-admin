@@ -7,7 +7,7 @@ import {
   SortableHandle,
   arrayMove }   from 'react-sortable-hoc'
 
-import Row      from '../Row/Row'
+import Project      from '../Project/Project'
 import Loading  from '../Loading/Loading'
 import Auth from '../../modules/Auth'
 
@@ -25,11 +25,11 @@ const DragHandle = SortableHandle((props) =>
 )
 
 const SortableItem = SortableElement((props) => {
-  const matchingRow = props.rows.find(row => row._id === props.value)
+  const matchingProject = props.projects.find(project => project._id === props.value)
   return (
     <div>
       <DragHandle handleColor = {props.handleColor}/>
-      <Row key={props.value} {...matchingRow}/>
+      <Project key={props.value} {...matchingProject}/>
       <style jsx>{`
         display: flex;
         align-items: center;
@@ -46,11 +46,11 @@ const SortableList = SortableContainer((props) => {
     <div style={{borderColor: props.color}}>
       {props.items.map((value, index) => (
         <SortableItem
-          key         = {`row-${index}`}
+          key         = {`project-${index}`}
           handleColor = {props.handleColor}
           index       = {index}
           value       = {value}
-          rows        = {props.rows}/>
+          projects        = {props.projects}/>
       ))}
       <style jsx>{`
         border: 4px solid #c5c5c5;
@@ -103,18 +103,18 @@ class SortableComponent extends React.Component {
         onSortEnd     = {this.onSortEnd}
         useDragHandle = {true}
         lockAxis      = {'y'}
-        rows          = {this.props.rows}/>
+        projects          = {this.props.projects}/>
     )
   }
 }
 
-class Rows extends React.Component {
+class Projects extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
       loading:       true,
-      activeRows:    [],
-      inactiveRows:  [],
+      activeProjects:    [],
+      inactiveProjects:  [],
       activeItems:   [],
       inactiveItems: []
     })
@@ -123,21 +123,21 @@ class Rows extends React.Component {
     const myHeaders = new Headers({
       'Authorization': `bearer ${Auth.getToken()}`
     })
-    const getRows = async () => {
+    const getProjects = async () => {
       try {
-        let activeRows   = await fetch(`${variables.PUBLICAPI}about/rows/active`)
-        let inactiveRows = await fetch(`${variables.PUBLICAPI}about/rows/inactive`, {
+        let activeProjects   = await fetch(`${variables.PUBLICAPI}about/projects/active`)
+        let inactiveProjects = await fetch(`${variables.PUBLICAPI}about/projects/inactive`, {
           headers: myHeaders
         })
         let activeList   = await fetch(`${variables.PUBLICAPI}list/${variables.ACTIVEROWS}`)
         let inactiveList = await fetch(`${variables.PUBLICAPI}list/${variables.INACTIVEROWS}`)
-        activeRows       = await activeRows.json()
-        inactiveRows     = await inactiveRows.json()
+        activeProjects       = await activeProjects.json()
+        inactiveProjects     = await inactiveProjects.json()
         activeList       = await activeList.json()
         inactiveList     = await inactiveList.json()
         this.setState({
-          activeRows:    activeRows,
-          inactiveRows:  inactiveRows,
+          activeProjects:    activeProjects,
+          inactiveProjects:  inactiveProjects,
           activeItems:   activeList.items,
           inactiveItems: inactiveList.items,
           loading:       false
@@ -149,7 +149,7 @@ class Rows extends React.Component {
         })
       }
     }
-    getRows()
+    getProjects()
   }
   render () {
     return (
@@ -157,9 +157,9 @@ class Rows extends React.Component {
         {this.state.loading && <Loading /> }
         <div className='lists'>
           <div className='list'>
-            <h2>Public Rows</h2>
+            <h2>Public Projects</h2>
             <SortableComponent
-              rows        = {this.state.activeRows}
+              projects        = {this.state.activeProjects}
               items       = {this.state.activeItems}
               color       = "rgb(73, 204, 73)"
               handleColor = "rgba(73, 204, 73, 0.6)"
@@ -167,9 +167,9 @@ class Rows extends React.Component {
               loading     = {this.state.loading}/>
           </div>
           <div className='list'>
-            <h2>Private Rows</h2>
+            <h2>Private Projects</h2>
             <SortableComponent
-              rows        = {this.state.inactiveRows}
+              projects        = {this.state.inactiveProjects}
               items       = {this.state.inactiveItems}
               color       = "rgb(255, 100, 100)"
               handleColor = "rgba(255, 100, 100, 0.6)"
@@ -177,8 +177,7 @@ class Rows extends React.Component {
               loading     = {this.state.loading}/>
           </div>
         </div>
-        <Link to='/cms/rows/new'><button className='addRowButton'>+</button></Link>
-
+        <Link to='/cms/projects/new'><button className='addProjectButton'>+</button></Link>
         <style jsx>{`
           .lists {
             display:         flex;
@@ -190,7 +189,7 @@ class Rows extends React.Component {
           h2 {
             text-align: center
           }
-          .addRowButton {
+          .addProjectButton {
             position: absolute;
             bottom: 30px;
             right: 30px;
@@ -210,4 +209,4 @@ class Rows extends React.Component {
   }
 }
 
-export default Rows
+export default Projects

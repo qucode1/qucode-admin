@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import { Redirect } from 'react-router-dom'
-import variables from '../../../variables.json'
+import axios                from 'axios'
+import { Redirect }         from 'react-router-dom'
+import variables            from '../../../variables.json'
 
 class DeleteRow extends Component {
   constructor(props) {
@@ -13,7 +13,6 @@ class DeleteRow extends Component {
   }
   handleClick() {
     const confirm = prompt(`Please confirm '${this.props.name}' deletion by confirming the name:`)
-    console.log(confirm)
     confirm === this.props.name
     ? axios.delete(`${variables.PUBLICAPI}about/rows/${this.props.id}`)
       .then(function(res) {
@@ -34,19 +33,19 @@ class DeleteRow extends Component {
         <style jsx>{`
           .deleteRowContainer {
             position: absolute;
-            right: 15px;
-            bottom: 15px
+            right:    15px;
+            bottom:   15px
           }
           .deleteRow {
-            width: 1.5em;
-            height: 1.5em;
-            font-size: 2em;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+            width:            1.5em;
+            height:           1.5em;
+            font-size:        2em;
+            border-radius:    50%;
+            border:           none;
+            cursor:           pointer;
+            box-shadow:       0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
             background-color: #e71111;
-            color: #fff;
+            color:            #fff;
           }
         `}</style>
       </div>

@@ -20,6 +20,7 @@ const LoginForm = ({
         <input
           type="email"
           name="email"
+          placeholder="email"
           errorText={errors.email}
           onChange={onChange}
           value={user.email}
@@ -30,6 +31,7 @@ const LoginForm = ({
         <input
           type="password"
           name="password"
+          placeholder="password"
           onChange={onChange}
           errorText={errors.password}
           value={user.password}

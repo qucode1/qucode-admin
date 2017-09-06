@@ -1,3 +1,4 @@
+export const loadingStyles = `
 .loader {
   position: absolute;
   top: calc(50% - 32px);
@@ -63,3 +64,4 @@
     transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
 }
+`

@@ -1,12 +1,15 @@
 import React from 'react'
 
-import styles from './Loading.css'
+import { loadingStyles } from './loadingStyles'
 
 const Loading = () => (
-  <div className={styles.loader}>
-    <div className={styles.inner + ' ' + styles.one} />
-    <div className={styles.inner + ' ' + styles.two} />
-    <div className={styles.inner + ' ' + styles.three} />
+  <div className='loadingContainer'>
+    <div className='loader'>
+      <div className='inner one' />
+      <div className='inner two' />
+      <div className='inner three' />
+    </div>
+    <style jsx>{ loadingStyles }</style>
   </div>
 )
 

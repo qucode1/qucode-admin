@@ -2,10 +2,10 @@ import React           from 'react'
 import axios           from 'axios'
 import { Route, Link } from 'react-router-dom'
 import NotFound        from '../NotFound/NotFound'
-import DeleteRow       from '../DeleteRow/DeleteRow'
+import DeleteProject       from '../DeleteProject/DeleteProject'
 import variables       from '../../../variables.json'
 
-class Row extends React.Component {
+class Project extends React.Component {
   constructor(props) {
     super(props)
     this.handleSubmit       = this.handleSubmit.bind(this)
@@ -44,16 +44,16 @@ class Row extends React.Component {
       content: this.state.content,
       active:  this.state.active || false
     }
-    const editRoute   = `${variables.PUBLICAPI}about/rows/${this.props._id}`
-    const createRoute = `${variables.PUBLICAPI}about/rows`
-    const postRoute   = this.props.newRow ? createRoute : editRoute
+    const editRoute   = `${variables.PUBLICAPI}about/projects/${this.props._id}`
+    const createRoute = `${variables.PUBLICAPI}about/projects`
+    const postRoute   = this.props.newProject ? createRoute : editRoute
 
     axios.post(postRoute, data)
     .then(function(res) {
       this.setState({
         info: {
           status: 'success',
-          message: `Row: '${data.name}' has been saved`,
+          message: `Project: '${data.name}' has been saved`,
           isChanged: false
         }
       })
@@ -68,7 +68,7 @@ class Row extends React.Component {
       this.setState({
         info: {
           status: 'failure',
-          message: `Row: '${data.name}' update failed. Please try again later.`
+          message: `Project: '${data.name}' update failed. Please try again later.`
         }
       })
       setTimeout(() => this.setState({ info: { status: 'idle', message: '...'} }), 10000)
@@ -143,10 +143,10 @@ class Row extends React.Component {
     const details = this.props.details
     const skills  = this.state.skills
     return (
-      <div className={`row ${details ? 'card' : ''}`}>
+      <div className={`project ${details ? 'card' : ''}`}>
         <h3>{details
             ? this.props.name
-            : <Link to={`/cms/rows/${this.props._id}`}>{this.props.name}</Link>
+            : <Link to={`/cms/projects/${this.props._id}`}>{this.props.name}</Link>
         }</h3>
 
         {details && <div className={`status ${this.state.info.status}`}>{this.state.info.message}</div>}
@@ -158,7 +158,7 @@ class Row extends React.Component {
                 <input className='radioButton' type='radio' name='active' value={false} onChange={this.changeInput} checked={this.state.active ? false : true}/>Private
               </div>
               <input ref={(name) => this.nameInput = name} className='formElement textElement' type='text' name='name' value={this.state.name} onChange={this.changeInput} />
-              <textarea ref={(text) => this.contentInput = text} className='formElement textElement' cols={30} rows={7} type='text' name='content' value={this.state.content} onChange={this.changeInput} />
+              <textarea ref={(text) => this.contentInput = text} className='formElement textElement' cols={30} projects={7} type='text' name='content' value={this.state.content} onChange={this.changeInput} />
               {this.state.isChanged && <button className='submit formElement' type='submit'>Save</button>}
             </form>
           : null //do not render form if details have not been requested
@@ -171,12 +171,12 @@ class Row extends React.Component {
         : null
         }
 
-        {details && <Link className='' to='/cms/rows' >Go back to Rows</Link>}
+        {details && <Link className='' to='/cms/projects' >Go back to Projects</Link>}
 
-        {details && !this.props.newRow && <DeleteRow name={this.props.name} id={this.props._id}/> /*only render delete Btn on edit view*/}
+        {details && !this.props.newProject && <DeleteProject name={this.props.name} id={this.props._id}/> /*only render delete Btn on edit view*/}
 
         <style jsx>{`
-          .row {
+          .project {
             padding: 0 5px
           }
           .card {
@@ -265,4 +265,4 @@ class Row extends React.Component {
   }
 }
 
-export default Row
+export default Project
