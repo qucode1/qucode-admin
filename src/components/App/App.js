@@ -31,10 +31,11 @@ const App = () => (
           }
           main {
             width: 100%;
+            padding: 10px
           }
           @media only screen and (max-width: 1300px) and (min-width: 900px) {
             .container {
-              padding-left: 215px
+              padding-left: 200px
             }
           }
           @media only screen and (min-width: 900px) {

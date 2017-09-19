@@ -27,15 +27,19 @@ const DragHandle = SortableHandle((props) =>
 const SortableItem = SortableElement((props) => {
   const matchingProject = props.projects.find(project => project._id === props.value)
   return (
-    <div>
+    <div className='item'>
       <DragHandle handleColor = {props.handleColor}/>
       <Project key={props.value} {...matchingProject}/>
       <style jsx>{`
+        .item {
         display: flex;
         align-items: center;
-        padding: 0 10px 0 0;
+        // padding: 0 10px 0 0;
+        height: 4.8rem;
+        min-width: 200px;
         background-color: #fff;
         box-shadow: 0 0 4px rgb(173, 173, 173)
+        }
       `}</style>
     </div>
   )
@@ -50,16 +54,16 @@ const SortableList = SortableContainer((props) => {
           handleColor = {props.handleColor}
           index       = {index}
           value       = {value}
-          projects        = {props.projects}/>
+          projects    = {props.projects}/>
       ))}
       <style jsx>{`
-        border: 4px solid #c5c5c5;
-        border-radius: 9px;
-        overflow: hidden;
-        background-color: rgb(249, 249, 249);
-        box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
-        width: auto;
-        display: inline-block;
+          border: 4px solid #c5c5c5;
+          border-radius: 9px;
+          overflow: hidden;
+          background-color: rgb(249, 249, 249);
+          box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+          width: auto;
+          display: inline-block;
       `}</style>
     </div>
   )
@@ -83,8 +87,8 @@ class SortableComponent extends React.Component {
       items: arrayMove(this.state.items, oldIndex, newIndex)
     })
     const currentList = this.props.currentList === "active"
-      ? variables.ACTIVEROWS
-      : variables.INACTIVEROWS
+      ? variables.ACTIVEPROJECTS
+      : variables.INACTIVEPROJECTS
     const postRoute = `${variables.PUBLICAPI}list/${currentList}`
     axios.post(postRoute, {items: this.state.items})
     .then(function(res) {
@@ -125,14 +129,14 @@ class Projects extends React.Component {
     })
     const getProjects = async () => {
       try {
-        let activeProjects   = await fetch(`${variables.PUBLICAPI}about/projects/active`)
-        let inactiveProjects = await fetch(`${variables.PUBLICAPI}about/projects/inactive`, {
+        let activeProjects   = await fetch(`${variables.PUBLICAPI}projects/active`)
+        let inactiveProjects = await fetch(`${variables.PUBLICAPI}projects/inactive`, {
           headers: myHeaders
         })
-        let activeList   = await fetch(`${variables.PUBLICAPI}list/${variables.ACTIVEROWS}`)
-        let inactiveList = await fetch(`${variables.PUBLICAPI}list/${variables.INACTIVEROWS}`)
-        activeProjects       = await activeProjects.json()
-        inactiveProjects     = await inactiveProjects.json()
+        let activeList   = await fetch(`${variables.PUBLICAPI}list/${variables.ACTIVEPROJECTS}`)
+        let inactiveList = await fetch(`${variables.PUBLICAPI}list/${variables.INACTIVEPROJECTS}`)
+        activeProjects   = await activeProjects.json()
+        inactiveProjects = await inactiveProjects.json()
         activeList       = await activeList.json()
         inactiveList     = await inactiveList.json()
         this.setState({
@@ -177,7 +181,7 @@ class Projects extends React.Component {
               loading     = {this.state.loading}/>
           </div>
         </div>
-        <Link to='/cms/projects/new'><button className='addProjectButton'>+</button></Link>
+        <Link to='/cms/projects/add'><button className='addProjectButton'>+</button></Link>
         <style jsx>{`
           .lists {
             display:         flex;

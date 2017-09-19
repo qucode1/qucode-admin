@@ -34,6 +34,7 @@ const SortableItem = SortableElement((props) => {
         display: flex;
         align-items: center;
         padding: 0 10px 0 0;
+        min-width: 200px;
         background-color: #fff;
         box-shadow: 0 0 4px rgb(173, 173, 173)
       `}</style>

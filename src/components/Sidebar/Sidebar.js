@@ -7,6 +7,7 @@ const Sidebar = () => (
       <ul className='nav'>
         <li className='navItem'><Link className='link' to='/cms/blog/posts'>Posts</Link></li>
         <li className='navItem'><Link className='link' to='/cms/rows'>Rows</Link></li>
+        <li className='navItem'><Link className='link' to='/cms/projects'>Projects</Link></li>
       </ul>
     </div>
     <style jsx>{`
