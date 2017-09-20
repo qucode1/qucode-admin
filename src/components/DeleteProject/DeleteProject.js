@@ -14,7 +14,7 @@ class DeleteProject extends Component {
   handleClick() {
     const confirm = prompt(`Please confirm '${this.props.name}' deletion by confirming the name:`)
     confirm === this.props.name
-    ? axios.delete(`${variables.PUBLICAPI}about/projects/${this.props.id}`)
+    ? axios.delete(`${variables.PUBLICAPI}projects/${this.props.id}`)
       .then(function(res) {
         this.setState({
           confirmed: true
@@ -29,7 +29,9 @@ class DeleteProject extends Component {
     return (
       <div className='deleteProjectContainer'>
         <button className='deleteProject' onClick={this.handleClick}>🗑</button>
-        {this.state.confirmed && <Redirect to='/cms/projects' />}
+        {this.state.confirmed && <Redirect push to={{
+            pathname: '/cms/projects',
+            state: { info: `Project: \'${this.props.name}\' has been deleted.`}}} />}
         <style jsx>{`
           .deleteProjectContainer {
             position: absolute;

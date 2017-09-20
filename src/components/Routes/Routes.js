@@ -116,7 +116,7 @@ class Routes extends Component {
           <h2>Welcome to my CMS!</h2>
         )} />
         <Route
-          path='/cms/blog/posts/:slug' 
+          path='/cms/blog/posts/:slug'
           component={(props) => <LazyPostDetail
             posts={posts}
             match={props.match} />} />
@@ -139,11 +139,12 @@ class Routes extends Component {
           path='/cms/projects/:id'
           component={(props) => <LazyAddProject
             edit
-            project={props.location.state}
+            project={props.location.state ? props.location.state.project : null}
+            info={props.location.state ? props.location.state.info : null}
             match={props.match}/> } />
         <Route
           path='/cms/projects'
-          component={() => <LazyProjects /> } />
+          component={(props) => <LazyProjects info={props.location.state ? props.location.state.info : null}/> } />
         <Route
           component={() => <LazyNotFound message='Url does not exist' />} />
         <style jsx>{`

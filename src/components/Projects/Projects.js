@@ -159,6 +159,7 @@ class Projects extends React.Component {
     return (
       <div>
         {this.state.loading && <Loading /> }
+        {this.props.info ? <div className='info'>{this.props.info}</div> : null}
         <div className='lists'>
           <div className='list'>
             <h2>Public Projects</h2>

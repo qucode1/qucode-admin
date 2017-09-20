@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
+import DeleteProject from '../DeleteProject/DeleteProject'
 import axios from 'axios'
 import variables from '../../../variables.json'
 
@@ -10,7 +11,6 @@ class ProjectForm extends Component {
       name          : '',
       active        : false,
       description   : '',
-      image         : '',
       tags          : [],
       isChanged     : false,
       projectAdded  : false,
@@ -18,7 +18,6 @@ class ProjectForm extends Component {
         name        : '',
         active      : false,
         description : '',
-        image       : '',
         tags        : []
       }
     }
@@ -39,11 +38,10 @@ class ProjectForm extends Component {
         name:        this.props.project.name,
         active:      this.props.project.active,
         description: this.props.project.description,
-        image:       this.props.project.image,
         tags:        this.props.project.tags
       }, this.setInitialState)
 
-    } else if (this.props.edit) {
+    } else if (this.props.edit && this.props.match.params.id) {
       const getProject = async() => {
         try {
           let project = await fetch(`${variables.PUBLICAPI}projects/${this.props.match.params.id}`)
@@ -52,7 +50,6 @@ class ProjectForm extends Component {
             name:         project.name,
             active:       project.active,
             description:  project.description,
-            image:        project.image,
             tags:         project.tags
           })
           this.setInitialState()
@@ -108,30 +105,40 @@ class ProjectForm extends Component {
 
     axios.post(postRoute, formData, config)
     .then(function(res) {
-      this.setState({ projectAdded: res.data})
-      this.setState({
-        info: {
-          status: 'success',
-          message: `Project: '${formData.name}' has been saved`,
-          isChanged: false
-        }
-      })
-      const newState = this.state
-      this.setState({
-        initialState: newState
-      })
+      if(postRoute === createRoute) {
+        this.setState({
+          projectAdded: res.data,
+          info: {
+            status: 'success',
+            message: `Project: '${this.state.name}' has been created`,
+            isChanged: false
+          }
+        })
+      } else {
+        this.setState({
+          info: {
+            status: 'success',
+            message: `Project: '${this.state.name}' has been saved`,
+            isChanged: false
+          }
+        })
+        const newState = this.state
+        this.setState({
+          initialState: newState
+        })
 
-      this.handleChanges()
-      setTimeout(() => this.setState({ info: { status: 'idle', message: '...'} }), 10000)
+        this.handleChanges()
+        setTimeout(() => this.setState({ info: null }), 10000)
+      }
     }.bind(this))
     .catch(function(err) {
       this.setState({
         info: {
           status: 'failure',
-          message: `Project: '${formData.name}' update failed. Please try again later.`
+          message: `Project: '${this.state.initialState.name}' update failed. Please try again later.`
         }
       })
-      setTimeout(() => this.setState({ info: { status: 'idle', message: '...'} }), 10000)
+      setTimeout(() => this.setState({ info: null }), 10000)
       console.error(err)
     }.bind(this))
   }
@@ -206,10 +213,14 @@ class ProjectForm extends Component {
         {this.state.projectAdded && !this.props.edit
           ? <Redirect push to={{
               pathname: `/cms/projects/${this.state.projectAdded._id}`,
-              state: this.state.projectAdded}} />
+              state: {
+                project : this.state.projectAdded,
+                info    : this.state.info
+              }
+            }} />
           : null
         }
-
+        {this.props.info ? <div className={`status ${this.props.info ? this.props.info.status : ''}`}>{this.props.info.message}</div> : null}
         <label htmlFor='name'>Name</label>
         <input
           type='text'
@@ -263,6 +274,12 @@ class ProjectForm extends Component {
             type='submit'
             className='formElement submit'
             value='Save Project'
+          />
+        }
+        {this.props.edit && <DeleteProject
+          name = {this.state.initialState.name}
+          id   = {this.props.match.params.id}
+          info = {this.state.info}
           />
         }
         <style jsx>{`
