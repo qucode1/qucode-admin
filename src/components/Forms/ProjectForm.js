@@ -12,6 +12,7 @@ class ProjectForm extends Component {
       active        : false,
       description   : '',
       tags          : [],
+      imageLink     : '',
       isChanged     : false,
       projectAdded  : false,
       initialState  : {
@@ -38,7 +39,8 @@ class ProjectForm extends Component {
         name:        this.props.project.name,
         active:      this.props.project.active,
         description: this.props.project.description,
-        tags:        this.props.project.tags
+        tags:        this.props.project.tags,
+        imageLink:   this.props.project.image
       }, this.setInitialState)
 
     } else if (this.props.edit && this.props.match.params.id) {
@@ -50,7 +52,8 @@ class ProjectForm extends Component {
             name:         project.name,
             active:       project.active,
             description:  project.description,
-            tags:         project.tags
+            tags:         project.tags,
+            imageLink:    project.image
           })
           this.setInitialState()
         } catch(err) {
@@ -99,7 +102,10 @@ class ProjectForm extends Component {
           'content-type': 'multipart/form-data'
       }
     }
-    const editRoute   = `${variables.PUBLICAPI}projects/${this.props._id}`
+    const editRoute   = `${variables.PUBLICAPI}projects/${this.props.match
+      ? this.props.match.params.id
+      : ''
+    }`
     const createRoute = `${variables.PUBLICAPI}projects`
     const postRoute   = this.props.edit ? editRoute : createRoute
 
@@ -110,25 +116,21 @@ class ProjectForm extends Component {
           projectAdded: res.data,
           info: {
             status: 'success',
-            message: `Project: '${this.state.name}' has been created`,
-            isChanged: false
-          }
+            message: `Project: '${this.state.name}' has been created`
+          },
+          isChanged: false
         })
       } else {
+        console.log(res)
         this.setState({
-          info: {
-            status: 'success',
-            message: `Project: '${this.state.name}' has been saved`,
-            isChanged: false
-          }
+          info: res.data,
+          isChanged: false
         })
         const newState = this.state
         this.setState({
           initialState: newState
         })
-
         this.handleChanges()
-        setTimeout(() => this.setState({ info: null }), 10000)
       }
     }.bind(this))
     .catch(function(err) {
@@ -221,6 +223,7 @@ class ProjectForm extends Component {
           : null
         }
         {this.props.info ? <div className={`status ${this.props.info ? this.props.info.status : ''}`}>{this.props.info.message}</div> : null}
+        {this.state.info ? <div className={`status ${this.state.info ? this.state.info.status : ''}`}>{this.state.info.message}</div> : null}
         <label htmlFor='name'>Name</label>
         <input
           type='text'
@@ -231,7 +234,7 @@ class ProjectForm extends Component {
           onChange={this.changeInput}
           placeholder='Project Name'
         />
-        <div ref={(radio) => this.statusButtons = radio} className='formElement'>
+        <div ref={(radio) => this.statusButtons = radio} className='formElement output'>
           <input
             className='radioButton'
             type='radio'
@@ -260,6 +263,7 @@ class ProjectForm extends Component {
           placeholder='Project Description'
         />
         <label htmlFor='image'>Image</label>
+        {this.state.imageLink && <p className='formElement output'>{this.state.imageLink}</p>}
         <input
           type='file'
           ref={(image) => this.imageInput = image}
@@ -322,7 +326,7 @@ class ProjectForm extends Component {
             box-shadow:  0 0 2px rgba(0,0,0,.12), 0 2px 3px rgba(0,0,0,.15);
             outline:     none
           }
-          .formElement:focus, .formElement:active {
+          .formElement:focus:not(.output), .formElement:active:not(.output) {
             box-shadow:  0 0 0px rgba(0,0,0,.12), 0 -2px 3px rgba(0,0,0,.15);
             background-color: rgb(255, 247, 227);
           }
