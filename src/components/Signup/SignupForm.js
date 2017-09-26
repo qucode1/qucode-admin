@@ -11,13 +11,13 @@ const SignUpForm = ({
     <form action="/" onSubmit={onSubmit}>
       <h2 className="card-heading">Sign Up</h2>
 
-      {errors.summary && <p className="error-message">{errors.summary}</p>}
+      {errors && <p className="error-message">{errors.summary}</p>}
 
       <div className="field-line">
         <input
           name="name"
           type="text"
-          errorText={errors.name}
+          placeholder="Name"
           onChange={onChange}
           value={user.name}
         />
@@ -27,7 +27,7 @@ const SignUpForm = ({
         <input
           name="email"
           type="email"
-          errorText={errors.email}
+          placeholder="Email Adress"
           onChange={onChange}
           value={user.email}
         />
@@ -37,8 +37,8 @@ const SignUpForm = ({
         <input
           type="password"
           name="password"
+          placeholder="Password"
           onChange={onChange}
-          errorText={errors.password}
           value={user.password}
         />
       </div>

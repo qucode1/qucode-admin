@@ -111,7 +111,6 @@ class Routes extends Component {
   render () {
     return (
       <Switch>
-        {!Auth.isUserAuthenticated() && <Route path='/' component={LazyLogin} />}
         <Route exact path='/cms' render={() => (
           <h2>Welcome to my CMS!</h2>
         )} />

@@ -21,7 +21,6 @@ const LoginForm = ({
           type="email"
           name="email"
           placeholder="email"
-          errorText={errors.email}
           onChange={onChange}
           value={user.email}
         />
@@ -33,7 +32,6 @@ const LoginForm = ({
           name="password"
           placeholder="password"
           onChange={onChange}
-          errorText={errors.password}
           value={user.password}
         />
       </div>

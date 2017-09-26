@@ -35,6 +35,14 @@ class Login extends React.Component {
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    // if the previous page was /login as well, set didLogin to enable a redirect
+    if (this.props.location === "/login" && Auth.isUserAuthenticated()) {
+      this.setState({
+        didLogin: true
+      })
+    }
+  }
 
   /**
    * Process the form.
@@ -57,9 +65,14 @@ class Login extends React.Component {
     .then(function(res) {
       Auth.authenticateUser(res.data.token)
       this.setState({
-        errors: {},
-        didLogin: true
+        errors: {}
       })
+
+    }.bind(this))
+    .then(function() {
+      if(Object.keys(this.state.errors).length === 0) {
+        this.props.history.go(-1)
+      }
     }.bind(this))
     .catch(function(err) {
       const errors = err.errors ? err.errors : {}
@@ -99,7 +112,7 @@ class Login extends React.Component {
           successMessage={this.state.successMessage}
           user={this.state.user}
         />
-        {this.state.didLogin && <Redirect to={`${this.props.location.pathname}`} />}
+        {this.state.didLogin && <Redirect to="/cms" />}
       </div>
     );
   }

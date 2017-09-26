@@ -5,8 +5,9 @@ import Auth from '../../modules/Auth'
 class Logout extends Component {
   render() {
     Auth.deauthenticateUser()
+    this.props.history.go(-1)
     return (
-      <Redirect to={`${this.props.location.pathname}`} />
+      <h1></h1>
     )
   }
 }

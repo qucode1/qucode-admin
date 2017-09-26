@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {
   Route,
+  Redirect,
   Switch
 } from 'react-router-dom'
 
@@ -75,13 +76,18 @@ class BaseRoutes extends Component {
   render () {
     return (
       <Switch>
-        {!Auth.isUserAuthenticated() && <Route path='/' component={LazyLogin} />}
+        {!Auth.isUserAuthenticated() && <Route path='/login' component={LazyLogin} />}
+        {!Auth.isUserAuthenticated() && <Route path='/signup' component={LazySignup} />}
+        {!Auth.isUserAuthenticated() && <Route path='/' render={() => (
+          <Redirect push to='/login' />
+        )} />}
         <Route exact path='/' render={() => (
           <h2>Welcome to the QuCode Admin Panel!</h2>
         )} />
-        <Route path='/login' component={LazyLogin} />
         <Route path='/logout' component={LazyLogout} />
-        <Route path='/signup' component={LazySignup} />
+        {Auth.isUserAuthenticated() && <Route path="/login" render={() => (
+          <Redirect to="/cms" />
+        )} />}
         <Route path='/cms' component={(props) => (
           <LazyCMS>
             <LazySidebar />
