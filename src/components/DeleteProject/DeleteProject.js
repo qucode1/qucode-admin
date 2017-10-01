@@ -11,7 +11,8 @@ class DeleteProject extends Component {
     }
     this.handleClick = this.handleClick.bind(this)
   }
-  handleClick() {
+  handleClick(e) {
+    e.preventDefault()
     const confirm = prompt(`Please confirm '${this.props.name}' deletion by confirming the name:`)
     confirm === this.props.name
     ? axios.delete(`${variables.PUBLICAPI}projects/${this.props.id}`)

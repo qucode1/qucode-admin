@@ -11,14 +11,21 @@ class ProjectForm extends Component {
       name          : '',
       active        : false,
       description   : '',
+      liveUrl       : '',
+      github        : '',
       tags          : [],
       imageLink     : '',
+      newTag        : '',
       isChanged     : false,
       projectAdded  : false,
       initialState  : {
         name        : '',
         active      : false,
         description : '',
+        liveUrl     : '',
+        github      : '',
+        liveUrl     : '',
+        github      : '',
         tags        : []
       }
     }
@@ -27,18 +34,23 @@ class ProjectForm extends Component {
     this.handleChanges      = this.handleChanges.bind(this)
     this.handleChangedClass = this.handleChangedClass.bind(this)
     this.setInitialState    = this.setInitialState.bind(this)
+    this.addTag             = this.addTag.bind(this)
   }
   setInitialState() {
+    // console.log("set init state")
     const initialState = this.state
-    this.setState({ initialState: initialState})
+    this.initialState  = Object.assign({}, initialState)
+    this.initialState.tags = [].concat(this.initialState.tags)
   }
   componentDidMount() {
-
+    // console.log("comp did mount")
     if (this.props.project){
       this.setState({
         name:        this.props.project.name,
         active:      this.props.project.active,
         description: this.props.project.description,
+        liveUrl    : this.props.project.liveUrl,
+        github     : this.props.project.github,
         tags:        this.props.project.tags,
         imageLink:   this.props.project.image
       }, this.setInitialState)
@@ -52,6 +64,8 @@ class ProjectForm extends Component {
             name:         project.name,
             active:       project.active,
             description:  project.description,
+            liveUrl     : project.liveUrl,
+            github      : project.github,
             tags:         project.tags,
             imageLink:    project.image
           })
@@ -62,8 +76,14 @@ class ProjectForm extends Component {
         }
       }
       getProject()
+    } else {
+      this.setInitialState()
     }
   }
+
+  componentWillUpdate(nextProps, nextState) {
+  }
+
   changeInput (e) {
     const key = e.target.name
     const getValue = () => {
@@ -95,6 +115,8 @@ class ProjectForm extends Component {
     formData.append('name'        , this.state.name)
     formData.append('description' , this.state.description)
     formData.append('image'       , this.state.image)
+    formData.append('liveUrl'     , this.state.liveUrl)
+    formData.append('github'      , this.state.github)
     formData.append('tags'        , this.state.tags)
     formData.append('active'      , this.state.active)
     const config = {
@@ -121,15 +143,12 @@ class ProjectForm extends Component {
           isChanged: false
         })
       } else {
-        console.log(res)
+        // console.log(res)
         this.setState({
           info: res.data,
           isChanged: false
         })
-        const newState = this.state
-        this.setState({
-          initialState: newState
-        })
+        this.setInitialState()
         this.handleChanges()
       }
     }.bind(this))
@@ -137,7 +156,7 @@ class ProjectForm extends Component {
       this.setState({
         info: {
           status: 'failure',
-          message: `Project: '${this.state.initialState.name}' update failed. Please try again later.`
+          message: `Project: '${this.initialState.name}' update failed. Please try again later.`
         }
       })
       setTimeout(() => this.setState({ info: null }), 10000)
@@ -155,6 +174,14 @@ class ProjectForm extends Component {
         ref:     this.nameInput,
         changed: false
       },
+      liveUrlInput: {
+        ref:     this.liveUrlInput,
+        changed: false
+      },
+      githubInput: {
+        ref:     this.githubInput,
+        changed: false
+      },
       descriptionInput: {
         ref:     this.descriptionInput,
         changed: false
@@ -162,14 +189,20 @@ class ProjectForm extends Component {
       imageInput: {
         ref:     this.imageInput,
         changed: false
+      },
+      tagList: {
+        ref    : this.tagList,
+        changed: false
       }
     }
     const state       = this.state
-    const first       = this.state.initialState
+    const first       = this.initialState
     const name        = state.name        !== first.name
     const description = state.description !== first.description
+    const liveUrl     = state.liveUrl     !== first.liveUrl
+    const github      = state.github      !== first.github
     const image       = state.image       !== first.image
-    const tags        = state.tags        !== first.tags
+    const tags        = state.tags.length !== first.tags.length
     const active      = state.active      !== first.active
     //compare each input and save in result in formFields
     name
@@ -178,13 +211,23 @@ class ProjectForm extends Component {
     description
       ? (formFields.descriptionInput.changed = true)
       : (formFields.descriptionInput.changed = false)
+    liveUrl
+      ? (formFields.liveUrlInput.changed = true)
+      : (formFields.liveUrlInput.changed = false)
+    github
+      ? (formFields.githubInput.changed = true)
+      : (formFields.githubInput.changed = false)
     image
       ? (formFields.imageInput.changed = true)
       : (formFields.imageInput.changed = false)
     active
       ? (formFields.statusButtons.changed = true)
       : (formFields.statusButtons.changed = false)
-    if( name || description || image || active ) { // if there are any changes set isChanged state and render save Btn
+    tags
+      ? (formFields.tagList.changed = true)
+      : (formFields.tagList.changed = false)
+    // if there are any changes set isChanged state and render save Btn
+    if( name || description || liveUrl || github || image || active || tags) {
       this.setState({
         isChanged: true
       })
@@ -203,6 +246,17 @@ class ProjectForm extends Component {
         ? formFields[key].ref.classList.add('changed')
         : formFields[key].ref.classList.remove('changed')
     })
+  }
+
+  addTag(e) {
+    e.preventDefault()
+    let tags = this.state.tags
+    let newTag = this.newTag.value
+    tags.push(newTag)
+    this.setState({
+        tags: tags,
+        newTag: ''
+    }, this.handleChanges)
   }
 
   render() {
@@ -234,12 +288,13 @@ class ProjectForm extends Component {
           onChange={this.changeInput}
           placeholder='Project Name'
         />
+        <label>Status</label>
         <div ref={(radio) => this.statusButtons = radio} className='formElement output'>
           <input
             className='radioButton'
             type='radio'
             name='active'
-            value={true}
+            value='true'
             onChange={this.changeInput}
             checked={this.state.active ? true : false}
           />Public
@@ -247,11 +302,31 @@ class ProjectForm extends Component {
             className='radioButton'
             type='radio'
             name='active'
-            value={false}
+            value='false'
             onChange={this.changeInput}
             checked={this.state.active ? false : true}
           />Private
         </div>
+        <label htmlFor='liveUrl'>Live Url</label>
+        <input
+          type='text'
+          ref={(liveUrl) => this.liveUrlInput = liveUrl}
+          name='liveUrl'
+          className='formElement'
+          value={this.state.liveUrl}
+          onChange={this.changeInput}
+          placeholder='Live Url'
+        />
+        <label htmlFor='github'>Github Repo</label>
+        <input
+          type='text'
+          ref={(github) => this.githubInput = github}
+          name='github'
+          className='formElement'
+          value={this.state.github}
+          onChange={this.changeInput}
+          placeholder='Github Repo'
+        />
         <label htmlFor='description'>Description</label>
         <textarea
           name='description'
@@ -263,7 +338,7 @@ class ProjectForm extends Component {
           placeholder='Project Description'
         />
         <label htmlFor='image'>Image</label>
-        {this.state.imageLink && <p className='formElement output'>{this.state.imageLink}</p>}
+        {this.state.imageLink && <div className='formElement output'><img src={`${variables.AWSPROJECTS}thumbnails/${this.state.imageLink}`} className='thumbnail'></img></div>}
         <input
           type='file'
           ref={(image) => this.imageInput = image}
@@ -273,6 +348,26 @@ class ProjectForm extends Component {
           id='image'
           accept='image/*'
         />
+        <label>Tags</label>
+        <ul
+          ref={(tagList) => this.tagList = tagList}
+          className='formElement output'
+        >
+          <input
+            type='text'
+            ref={(newTag) => this.newTag = newTag}
+            name='newTag'
+            value={this.state.newTag}
+            onChange={this.changeInput}
+            placeholder='New Tag'
+          />
+          <button onClick={this.addTag}>Add Tag</button>
+          {this.state.tags.map((tag) => (
+            <li key={tag} className={`tag ${tag}`}>
+              {tag}
+            </li>
+          ))}
+        </ul>
         {this.state.isChanged
           && <input
             type='submit'
@@ -281,7 +376,7 @@ class ProjectForm extends Component {
           />
         }
         {this.props.edit && <DeleteProject
-          name = {this.state.initialState.name}
+          name = {'Delete ' + this.state.name}
           id   = {this.props.match.params.id}
           info = {this.state.info}
           />
@@ -337,6 +432,10 @@ class ProjectForm extends Component {
           }
           .file {
             cursor: pointer
+          }
+          .thumbnail {
+            width: auto;
+            height: auto;
           }
           .status {
             opacity:       0;
